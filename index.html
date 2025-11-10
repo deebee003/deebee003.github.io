@@ -19,10 +19,10 @@
     </style>
 </head>
 <body>
-<pre id="output"></pre>
+<pre id="output"></pre> <!-- Empty placeholder for the random result -->
 
 <script>
-    // Your list of text entries
+    // List of entries
     const entries = [
         "IceAceArrowYT:BloxgenXEPRK",
         "StarryBeastPixel40:BloxgenJ2CZK",
@@ -30,10 +30,10 @@
         "ChillBlastUltra_YT:Generated$2011820"
     ];
 
-    // Choose a random entry
+    // Pick one random entry
     const randomEntry = entries[Math.floor(Math.random() * entries.length)];
 
-    // Display it in the <pre> element
+    // Display it in the <pre>
     document.getElementById("output").textContent = randomEntry;
 </script>
 </body>
