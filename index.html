@@ -2,14 +2,39 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Raw Text</title>
+    <title>Random Display</title>
+    <style>
+        body {
+            font-family: monospace;
+            background-color: #111;
+            color: #0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        pre {
+            font-size: 1.2em;
+        }
+    </style>
 </head>
 <body>
-<pre>
-IceAceArrowYT:BloxgenXEPRK
-StarryBeastPixel40:BloxgenJ2CZK
-Vip3rSab3r99:Bloxgen5EICW
-ChillBlastUltra_YT:Generated$2011820
-</pre>
+<pre id="output"></pre>
+
+<script>
+    // Your list of text entries
+    const entries = [
+        "IceAceArrowYT:BloxgenXEPRK",
+        "StarryBeastPixel40:BloxgenJ2CZK",
+        "Vip3rSab3r99:Bloxgen5EICW",
+        "ChillBlastUltra_YT:Generated$2011820"
+    ];
+
+    // Choose a random entry
+    const randomEntry = entries[Math.floor(Math.random() * entries.length)];
+
+    // Display it in the <pre> element
+    document.getElementById("output").textContent = randomEntry;
+</script>
 </body>
 </html>
