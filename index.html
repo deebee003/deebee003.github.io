@@ -2,27 +2,10 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Random Display</title>
-    <style>
-        body {
-            font-family: monospace;
-            background-color: #111;
-            color: #0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        pre {
-            font-size: 1.2em;
-        }
-    </style>
+    <title>Raw Text</title>
 </head>
 <body>
-<pre id="output"></pre> <!-- Empty placeholder for the random result -->
-
 <script>
-    // List of entries
     const entries = [
         "IceAceArrowYT:BloxgenXEPRK",
         "StarryBeastPixel40:BloxgenJ2CZK",
@@ -30,11 +13,10 @@
         "ChillBlastUltra_YT:Generated$2011820"
     ];
 
-    // Pick one random entry
     const randomEntry = entries[Math.floor(Math.random() * entries.length)];
 
-    // Display it in the <pre>
-    document.getElementById("output").textContent = randomEntry;
+    // Replace entire page content with just the text
+    document.body.textContent = randomEntry;
 </script>
 </body>
 </html>
