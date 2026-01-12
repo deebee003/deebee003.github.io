@@ -1,22 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Raw Text</title>
+  <title>press me</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      background: black;
+      color: white;
+    }
+    button {
+      font-size: 32px;
+      padding: 20px 40px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<button id="btn">hi press me or else…</button>
+
+<script>
+document.getElementById("btn").onclick = () => {
+  const w = window.open("", "_blank");
+
+  w.document.write(`
+<!DOCTYPE html>
+<html>
+<head>
+<title>too late</title>
 </head>
 <body>
 <script>
-    const entries = [
-        "IceAceArrowYT:BloxgenXEPRK",
-        "StarryBeastPixel40:BloxgenJ2CZK",
-        "Vip3rSab3r99:Bloxgen5EICW",
-        "ChillBlastUltra_YT:Generated$2011820"
-    ];
+(() => {
+  const IMG = "https://tr.rbxcdn.com/180DAY-212d66d0c4cbdaa3ea351b688ebc71f4/420/420/Decal/Webp/noFilter";
+  const SOUND = "https://www.myinstants.com/media/sounds/cat-laugh-meme-1.mp3";
 
-    const randomEntry = entries[Math.floor(Math.random() * entries.length)];
+  const style = document.createElement("style");
+  style.textContent =
+    "*,*::before,*::after{" +
+    "background-image:url('" + IMG + "')!important;" +
+    "background-repeat:repeat!important;" +
+    "background-size:120px 120px!important;" +
+    "color:transparent!important;" +
+    "border-color:transparent!important;" +
+    "box-shadow:none!important;" +
+    "text-shadow:none!important;" +
+    "}";
 
-    // Replace entire page content with just the text
-    document.body.textContent = randomEntry;
+  document.head.appendChild(style);
+
+  document.querySelectorAll("img").forEach(e => {
+    e.src = IMG;
+    e.srcset = "";
+  });
+
+  document.querySelectorAll("video").forEach(v => {
+    v.poster = IMG;
+    v.pause();
+  });
+
+  document.querySelectorAll("svg").forEach(s => {
+    s.innerHTML = "";
+    s.style.backgroundImage = "url('" + IMG + "')";
+  });
+
+  setInterval(() => {
+    document.querySelectorAll("*").forEach(e => {
+      e.style.backgroundImage = "url('" + IMG + "')";
+    });
+  }, 500);
+
+  const audio = new Audio(SOUND);
+  audio.loop = true;
+  audio.volume = 1;
+  audio.play();
+})();
+<\/script>
+</body>
+</html>
+  `);
+
+  w.document.close();
+};
 </script>
+
 </body>
 </html>
