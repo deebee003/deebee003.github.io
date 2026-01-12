@@ -5,10 +5,10 @@
   <style>
     body {
       margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       background: black;
       color: white;
       font-family: Arial, sans-serif;
@@ -22,56 +22,9 @@
 </head>
 <body>
 
-<button id="btn">hi press me or else…</button>
-
-<script>
-document.getElementById("btn").onclick = () => {
-  openClone();
-};
-
-function openClone() {
-  const w = window.open("", "_blank");
-
-  w.document.write(`
-<!DOCTYPE html>
-<html>
-<head><title>too late</title></head>
-<body>
-<script>
-(() => {
-  const IMG = "https://tr.rbxcdn.com/180DAY-212d66d0c4cbdaa3ea351b688ebc71f4/420/420/Decal/Webp/noFilter";
-  const SOUND = "https://www.myinstants.com/media/sounds/cat-laugh-meme-1.mp3";
-
-  const style = document.createElement("style");
-  style.textContent =
-    "*,*::before,*::after{" +
-    "background-image:url('" + IMG + "')!important;" +
-    "background-repeat:repeat!important;" +
-    "background-size:120px 120px!important;" +
-    "color:transparent!important;" +
-    "border-color:transparent!important;" +
-    "}";
-
-  document.head.appendChild(style);
-
-  const audio = new Audio(SOUND);
-  audio.loop = true;
-  audio.play();
-
-  setTimeout(() => {
-    try {
-      window.open(window.location.href, "_blank");
-    } catch (e) {}
-  }, 1000);
-})();
-<\/script>
-</body>
-</html>
-  `);
-
-  w.document.close();
-}
-</script>
+<button onclick="window.open('lol.html','_blank')">
+  hi press me or else…
+</button>
 
 </body>
 </html>
