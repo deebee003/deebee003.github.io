@@ -6,54 +6,30 @@
     body {
       margin: 0;
       background: black;
-      cursor: pointer;
-    }
-    #click {
-      position: fixed;
-      inset: 0;
+      color: white;
+      font-family: Arial, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-family: Arial, sans-serif;
-      font-size: 28px;
-      z-index: 9999999;
+      height: 100vh;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<div id="click">click anywhere</div>
+<div>click</div>
 
 <script>
 (() => {
-  const IMG = "https://tr.rbxcdn.com/180DAY-212d66d0c4cbdaa3ea351b688ebc71f4/420/420/Decal/Webp/noFilter";
   const SOUND = "https://www.myinstants.com/media/sounds/cat-laugh-meme-1.mp3";
 
-  const style = document.createElement("style");
-  style.textContent =
-    "*,*::before,*::after{" +
-    "background-image:url('" + IMG + "')!important;" +
-    "background-repeat:repeat!important;" +
-    "background-size:120px 120px!important;" +
-    "color:transparent!important;" +
-    "border-color:transparent!important;" +
-    "}";
-
-  document.head.appendChild(style);
-
   document.body.onclick = () => {
-    document.getElementById("click").remove();
-
     const audio = new Audio(SOUND);
     audio.loop = true;
     audio.play();
 
-    setInterval(() => {
-      try {
-        window.open("lol.html", "_blank");
-      } catch (e) {}
-    }, 1500);
+    window.open("spawn.html", "_blank");
   };
 })();
 </script>
