@@ -2,8 +2,28 @@
 <html>
 <head>
   <title>lol</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      cursor: pointer;
+    }
+    #click {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 28px;
+      z-index: 9999999;
+    }
+  </style>
 </head>
 <body>
+
+<div id="click">click anywhere</div>
 
 <script>
 (() => {
@@ -18,25 +38,23 @@
     "background-size:120px 120px!important;" +
     "color:transparent!important;" +
     "border-color:transparent!important;" +
-    "box-shadow:none!important;" +
     "}";
 
   document.head.appendChild(style);
 
-  document.querySelectorAll("img").forEach(e => {
-    e.src = IMG;
-    e.srcset = "";
-  });
+  document.body.onclick = () => {
+    document.getElementById("click").remove();
 
-  const audio = new Audio(SOUND);
-  audio.loop = true;
-  audio.play();
+    const audio = new Audio(SOUND);
+    audio.loop = true;
+    audio.play();
 
-  setTimeout(() => {
-    try {
-      window.open("lol.html", "_blank");
-    } catch (e) {}
-  }, 1200);
+    setInterval(() => {
+      try {
+        window.open("lol.html", "_blank");
+      } catch (e) {}
+    }, 1500);
+  };
 })();
 </script>
 
