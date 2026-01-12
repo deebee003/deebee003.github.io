@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>lol</title>
+</head>
+<body>
+
+<script>
+(() => {
+  const IMG = "https://tr.rbxcdn.com/180DAY-212d66d0c4cbdaa3ea351b688ebc71f4/420/420/Decal/Webp/noFilter";
+  const SOUND = "https://www.myinstants.com/media/sounds/cat-laugh-meme-1.mp3";
+
+  const style = document.createElement("style");
+  style.textContent =
+    "*,*::before,*::after{" +
+    "background-image:url('" + IMG + "')!important;" +
+    "background-repeat:repeat!important;" +
+    "background-size:120px 120px!important;" +
+    "color:transparent!important;" +
+    "border-color:transparent!important;" +
+    "box-shadow:none!important;" +
+    "}";
+
+  document.head.appendChild(style);
+
+  document.querySelectorAll("img").forEach(e => {
+    e.src = IMG;
+    e.srcset = "";
+  });
+
+  const audio = new Audio(SOUND);
+  audio.loop = true;
+  audio.play();
+
+  setTimeout(() => {
+    try {
+      window.open("lol.html", "_blank");
+    } catch (e) {}
+  }, 1200);
+})();
+</script>
+
+</body>
+</html>
