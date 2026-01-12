@@ -4,13 +4,14 @@
   <title>press me</title>
   <style>
     body {
+      margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      font-family: Arial, sans-serif;
       background: black;
       color: white;
+      font-family: Arial, sans-serif;
     }
     button {
       font-size: 32px;
@@ -25,14 +26,16 @@
 
 <script>
 document.getElementById("btn").onclick = () => {
+  openClone();
+};
+
+function openClone() {
   const w = window.open("", "_blank");
 
   w.document.write(`
 <!DOCTYPE html>
 <html>
-<head>
-<title>too late</title>
-</head>
+<head><title>too late</title></head>
 <body>
 <script>
 (() => {
@@ -47,37 +50,19 @@ document.getElementById("btn").onclick = () => {
     "background-size:120px 120px!important;" +
     "color:transparent!important;" +
     "border-color:transparent!important;" +
-    "box-shadow:none!important;" +
-    "text-shadow:none!important;" +
     "}";
 
   document.head.appendChild(style);
 
-  document.querySelectorAll("img").forEach(e => {
-    e.src = IMG;
-    e.srcset = "";
-  });
-
-  document.querySelectorAll("video").forEach(v => {
-    v.poster = IMG;
-    v.pause();
-  });
-
-  document.querySelectorAll("svg").forEach(s => {
-    s.innerHTML = "";
-    s.style.backgroundImage = "url('" + IMG + "')";
-  });
-
-  setInterval(() => {
-    document.querySelectorAll("*").forEach(e => {
-      e.style.backgroundImage = "url('" + IMG + "')";
-    });
-  }, 500);
-
   const audio = new Audio(SOUND);
   audio.loop = true;
-  audio.volume = 1;
   audio.play();
+
+  setTimeout(() => {
+    try {
+      window.open(window.location.href, "_blank");
+    } catch (e) {}
+  }, 1000);
 })();
 <\/script>
 </body>
@@ -85,7 +70,7 @@ document.getElementById("btn").onclick = () => {
   `);
 
   w.document.close();
-};
+}
 </script>
 
 </body>
