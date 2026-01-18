@@ -1,23 +1,115 @@
-async function downloadAsset() {
-    const id = document.getElementById('assetId').value.trim();
-    if (!id) return alert("Enter an ID");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Asset Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            text-align: center;
+            background: #f0f0f0;
+        }
+        h1 { color: #00bfff; }
+        input, button {
+            padding: 12px;
+            font-size: 16px;
+            margin: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #00bfff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover { background: #009acd; }
+        #status {
+            margin-top: 20px;
+            font-weight: bold;
+            min-height: 24px;
+        }
+        #info {
+            font-size: 14px;
+            color: #555;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Roblox Asset Downloader</h1>
+    <p>Enter asset/model ID and click Download.<br>
+    <strong>You must be logged into Roblox in this browser</strong> (or the cookie must be valid — but browser restrictions often block it).</p>
 
-    const url = `https://assetdelivery.roblox.com/v1/asset/?id=${id}`;
+    <input type="text" id="assetId" placeholder="Asset ID (e.g. 1234567890)" autofocus>
+    <br>
+    <button onclick="downloadAsset()">Download Asset</button>
 
-    try {
-        const response = await fetch(url, { credentials: 'include' });  // sends cookies
-        if (!response.ok) throw new Error(`Error: ${response.status}`);
+    <div id="status"></div>
 
-        const blob = await response.blob();
-        const downloadUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = downloadUrl;
-        a.download = `asset_${id}.rbxm`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(downloadUrl);
-    } catch (err) {
-        alert("Download failed: " + err.message + "\n\n(Most likely CORS block or not logged in / no permission)");
-    }
-}
+    <div id="info">
+        <p><strong>Note (Jan 2026):</strong> Asset delivery requires authentication since April 2025.<br>
+        If it fails (CORS / 401), try:<br>
+        1. Log in to roblox.com first (remove cookie code below).<br>
+        2. Or use a userscript/extension that relaxes CORS.<br>
+        File saves as .rbxm (models) — rename if needed (e.g. .rbxl for places).</p>
+    </div>
+
+    <script>
+        const COOKIE = '_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_CAEaAhADIhsKBGR1aWQSEzczNjUyNzA0NjU1NTUzNjA3MzEoAw.e0ZJmo4Dw4ViMUguAYBzbkriRydPEUhy_VhFH69DQhLPpnojxF4Z5hiEnBIoVd-fsS9hBngMYuwmQTOH_KZhtBq2T8F07HfmdvLa0TyNijIvJ-0IG4XUEIei5Vpa5mVkqilvxeqYXtUQJsGyM_1acsqoMxc6uNZVvtTR_SyUHwSgBwyiO15RmXhbi2V5R-ANf1kz-bMaOQ8g0hA1ok1q9tfpJwsgOwCNIEVvZDsaC0GG5EP4nMAc6wDPzRBEMLjEtsmVocelSoN2uOCn-wo5nZMnbG55KAQfCWrUQs64hPYHbvr-Sf-P2gkRvyyIxlK51jhext3JFxbZNlEr-7Wrfry4DrfPQcIh3dGdoh5kbf2Tnxd8WjtXOZff1Q2ozMPBO3x7jijNpYaUfQ0D_zHgaLH6qfRr2hBui-5BUIkKRYaHDXCf05-k3AZDPmfpHgywx9b3SCS0ujGGh5yoGZfxvvf3akmlUxm-GXTDtpEGGAkyW2oAJcnYmLk0GT2LDDAj748rg7Zk5NoC9fVm5MWgyaAjl48byodN51Wmpm89wd93mvk1PPhNDJsY3LvdUAf-PD6QS0UQLKx7UkJVECIiKdEzxuWOoU5n3Qr5fjfc-6FF_0RtCoDUXh2uX0ewFdwKWK3iDM8h-hfmv6la3ZdceLMPvZpMfRyQG-_LK3ds3JdslLGp4qeHF_SeTUMMHBnLRnIRyCrhozN9ZiGu6Dak1WwMW8llGUSWAjME05PoGx-dekI5AgfVq1MqVDCLNzGAHAPGjA';
+
+        async function downloadAsset() {
+            const id = document.getElementById('assetId').value.trim();
+            const status = document.getElementById('status');
+
+            if (!id || isNaN(id)) {
+                status.textContent = 'Please enter a valid numeric Asset ID.';
+                status.style.color = 'red';
+                return;
+            }
+
+            status.textContent = 'Downloading...';
+            status.style.color = 'blue';
+
+            const url = `https://assetdelivery.roblox.com/v1/asset/?id=${id}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    credentials: 'include', // tries to send existing Roblox cookies
+                    headers: {
+                        // Manual cookie injection — usually blocked by browser on non-roblox domains
+                        'Cookie': `.ROBLOSECURITY=${COOKIE}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status} - ${response.statusText}`);
+                }
+
+                const blob = await response.blob();
+                const downloadUrl = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = downloadUrl;
+                a.download = `asset_${id}.rbxm`; // .rbxm for models; change to .rbxl etc. if needed
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(downloadUrl);
+
+                status.textContent = 'Download started! Check your downloads folder.';
+                status.style.color = 'green';
+            } catch (err) {
+                status.textContent = `Failed: ${err.message}\n(Most likely CORS block, invalid cookie, no permission, or not logged in)`;
+                status.style.color = 'red';
+                console.error(err);
+            }
+        }
+    </script>
+</body>
+</html>
