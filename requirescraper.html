@@ -42,26 +42,28 @@
 </head>
 <body>
     <h1>Roblox Asset Downloader</h1>
-    <p>Enter the asset/model ID and click Download.<br>
-    <strong>You must be logged in to roblox.com in this browser</strong> for this to work (since April 2025, authentication is required).</p>
+    <p>Enter the asset/model ID and click the button.<br>
+    <strong>You must be logged in to roblox.com</strong> in this browser.<br>
+    This will open the direct download link in a new tab — it should auto-download if you have permission.</p>
 
     <input type="text" id="assetId" placeholder="Asset ID (e.g. 1234567890)" autofocus>
     <br>
-    <button onclick="downloadAsset()">Download Asset</button>
+    <button onclick="openDownload()">Open Download in New Tab</button>
 
     <div id="status"></div>
 
     <div id="info">
-        <p><strong>Notes (2026):</strong><br>
-        - Works best for your own assets or public ones you have permission to access.<br>
-        - If you get 401 Unauthorized: Log in to roblox.com first, or the asset may be restricted.<br>
-        - CORS errors? Try running from a local server (e.g., Python: <code>python -m http.server</code>) instead of opening the file directly.<br>
-        - File usually saves as .rbxm (models) — rename to .rbxl for places if needed.<br>
-        - Respect Roblox TOS: Only download assets you own or have rights to.</p>
+        <p><strong>How it works (2026):</strong><br>
+        - Opens <code>https://assetdelivery.roblox.com/v1/asset/?id=ID</code> in a new tab.<br>
+        - If logged in and you own/can access the asset → browser downloads the file (.rbxm for models, etc.).<br>
+        - If 401 error shows in new tab → not logged in or no permission.<br>
+        - Rename file if needed (.rbxl for places).<br>
+        - Test with your own model ID first.<br>
+        - Respect Roblox TOS — only for assets you own or have rights to download.</p>
     </div>
 
     <script>
-        async function downloadAsset() {
+        function openDownload() {
             const id = document.getElementById('assetId').value.trim();
             const status = document.getElementById('status');
 
@@ -71,38 +73,27 @@
                 return;
             }
 
-            status.textContent = 'Downloading... (this may take a moment)';
-            status.style.color = 'blue';
-
             const url = `https://assetdelivery.roblox.com/v1/asset/?id=${id}`;
 
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    credentials: 'include'  // Sends your Roblox login cookies automatically
-                });
+            status.textContent = 'Opening in new tab... (check for download prompt)';
+            status.style.color = 'blue';
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status} - ${response.statusText} (likely not logged in, no permission, or restricted asset)`);
-                }
+            // Open in new tab/window
+            const newWindow = window.open(url, '_blank');
 
-                const blob = await response.blob();
-                const downloadUrl = URL.createObjectURL(blob);
-
-                const a = document.createElement('a');
-                a.href = downloadUrl;
-                a.download = `asset_${id}.rbxm`;  // Change extension if needed (.rbxl, etc.)
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(downloadUrl);
-
-                status.textContent = 'Download started! Check your downloads folder.';
-                status.style.color = 'green';
-            } catch (err) {
-                status.textContent = `Failed: ${err.message}\n(Try logging into roblox.com, or use a CORS-unblocking extension if blocked.)`;
-                status.style.color = 'red';
-                console.error(err);
+            if (newWindow) {
+                // Optional: Focus the new tab
+                newWindow.focus();
+            } else {
+                // Popup blocked? Fallback message
+                status.textContent = 'Popup blocked! Allow popups or click this link manually:';
+                status.style.color = 'orange';
+                const link = document.createElement('a');
+                link.href = url;
+                link.textContent = url;
+                link.target = '_blank';
+                status.appendChild(document.createElement('br'));
+                status.appendChild(link);
             }
         }
     </script>
