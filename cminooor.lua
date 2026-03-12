@@ -16,9 +16,9 @@ local player=Players.LocalPlayer
 --------------------------------------------------
 
 if queue_on_teleport then
-	queue_on_teleport(game:HttpGet("YOUR_SCRIPT_URL"))
+	queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/deebee003/deebee003.github.io/refs/heads/main/cminooor.lua"))
 elseif syn and syn.queue_on_teleport then
-	syn.queue_on_teleport(game:HttpGet("YOUR_SCRIPT_URL"))
+	syn.queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/deebee003/deebee003.github.io/refs/heads/main/cminooor.lua"))
 end
 
 --------------------------------------------------
