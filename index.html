@@ -1,93 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Random Roblox User Generator</title>
+<title>Random Roblox User</title>
 
 <style>
 body{
-    font-family: Arial, sans-serif;
-    background:#0f172a;
+    font-family:Arial;
+    background:#111827;
     color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-
-.container{
-    background:#1e293b;
-    padding:30px;
-    border-radius:10px;
     text-align:center;
+    padding-top:100px;
 }
 
 button{
-    padding:10px 20px;
-    font-size:16px;
+    padding:12px 25px;
+    font-size:18px;
+    background:#2563eb;
     border:none;
-    border-radius:6px;
-    background:#3b82f6;
+    border-radius:8px;
     color:white;
     cursor:pointer;
 }
 
-button:hover{
-    background:#2563eb;
-}
-
 .result{
-    margin-top:20px;
-    font-size:18px;
+    margin-top:25px;
+    font-size:20px;
 }
 </style>
-</head>
 
+</head>
 <body>
 
-<div class="container">
-<h2>Random Roblox User</h2>
+<h1>Random Roblox User Generator</h1>
 
-<button onclick="generateUser()">Generate Random User</button>
+<button onclick="generateUser()">Generate</button>
 
-<div class="result" id="result">
-Press generate
-</div>
-</div>
+<div class="result" id="result"></div>
 
 <script>
 
-function randomID(min, max){
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+function randomID(min,max){
+return Math.floor(Math.random()*(max-min+1))+min;
 }
 
 async function generateUser(){
 
-    const id = randomID(100,777777);
+const id = randomID(100,777777);
 
-    document.getElementById("result").innerText = "Checking ID: " + id + "...";
+document.getElementById("result").innerText="Checking ID "+id+"...";
 
-    try{
+try{
 
-        const res = await fetch("https://users.roblox.com/v1/users/" + id);
-        const data = await res.json();
+const url = "https://corsproxy.io/?https://users.roblox.com/v1/users/"+id;
 
-        if(data.name){
-            document.getElementById("result").innerHTML =
-            `
-            Username: <b>${data.name}</b><br>
-            UserID: ${id}<br>
-            <a href="https://www.roblox.com/users/${id}/profile" target="_blank">Open Profile</a>
-            `;
-        }
-        else{
-            document.getElementById("result").innerText =
-            "User ID " + id + " does not exist. Try again.";
-        }
+const response = await fetch(url);
+const data = await response.json();
 
-    }catch(err){
-        document.getElementById("result").innerText = "Error contacting Roblox API.";
-    }
+if(data.name){
+
+document.getElementById("result").innerHTML = `
+Username: <b>${data.name}</b><br>
+UserID: ${id}<br><br>
+<a href="https://www.roblox.com/users/${id}/profile" target="_blank">Open Profile</a>
+`;
+
+}else{
+
+document.getElementById("result").innerText="User not found. Try again.";
+
+}
+
+}catch(e){
+
+document.getElementById("result").innerText="Error contacting Roblox API.";
+
+}
 
 }
 
