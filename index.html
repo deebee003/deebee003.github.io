@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Random Roblox User Generator</title>
+<title>Old Roblox Account Finder</title>
 
 <style>
 body{
-    font-family: Arial, sans-serif;
+    font-family: Arial;
     background:#0f172a;
     color:white;
     display:flex;
@@ -32,71 +32,96 @@ button{
     cursor:pointer;
 }
 
-button:hover{
-    background:#2563eb;
-}
-
 .result{
     margin-top:20px;
     font-size:18px;
 }
+
+.list{
+    margin-top:20px;
+    text-align:left;
+    max-height:300px;
+    overflow:auto;
+}
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
-<h2>Random Roblox User</h2>
 
-<button onclick="generateUser()">Generate Random User</button>
+<h2>Old Roblox User Finder</h2>
 
-<div class="result" id="result">
-Press generate
+<button onclick="startScan()">Start Scanning</button>
+
+<div class="result" id="status">
+Press start
 </div>
+
+<div class="list" id="users"></div>
+
 </div>
 
 <script>
+
+let scanning = false;
 
 function randomID(min,max){
     return Math.floor(Math.random()*(max-min+1))+min;
 }
 
-async function generateUser(){
+async function checkUser(){
 
     const id = randomID(100,777777);
 
-    document.getElementById("result").innerText = "Checking ID: " + id + "...";
+    document.getElementById("status").innerText = "Checking ID: " + id;
 
     try{
 
         const url = "https://corsproxy.io/?https://users.roblox.com/v1/users/" + id;
 
-        const response = await fetch(url);
-
-        const text = await response.text();
+        const res = await fetch(url);
+        const text = await res.text();
         const data = JSON.parse(text);
 
         if(data && data.id){
 
-            document.getElementById("result").innerHTML =
-            `
-            Username: <b>${data.name}</b><br>
-            Display Name: ${data.displayName}<br>
-            UserID: ${data.id}<br><br>
-            <a href="https://www.roblox.com/users/${data.id}/profile" target="_blank">Open Profile</a>
-            `;
+            const createdYear = new Date(data.created).getFullYear();
 
-        }else{
+            if(createdYear <= 2010){
 
-            document.getElementById("result").innerText =
-            "User ID " + id + " does not exist. Try again.";
+                const container = document.getElementById("users");
+
+                container.innerHTML =
+                `
+                Username: <b>${data.name}</b><br>
+                Display Name: ${data.displayName}<br>
+                Created: ${data.created}<br>
+                UserID: ${data.id}<br>
+                <a href="https://www.roblox.com/users/${data.id}/profile" target="_blank">Profile</a>
+                <hr>
+                ` + container.innerHTML;
+
+            }
 
         }
 
-    }catch(err){
+    }catch(e){}
 
-        console.error(err);
-        document.getElementById("result").innerText = "Error contacting Roblox API.";
+}
+
+async function startScan(){
+
+    if(scanning) return;
+
+    scanning = true;
+
+    while(scanning){
+
+        await checkUser();
+
+        await new Promise(r => setTimeout(r,400));
 
     }
 
