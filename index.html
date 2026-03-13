@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Random Roblox User Generator</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#0f172a;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    background:#1e293b;
+    padding:30px;
+    border-radius:10px;
+    text-align:center;
+}
+
+button{
+    padding:10px 20px;
+    font-size:16px;
+    border:none;
+    border-radius:6px;
+    background:#3b82f6;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#2563eb;
+}
+
+.result{
+    margin-top:20px;
+    font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>Random Roblox User</h2>
+
+<button onclick="generateUser()">Generate Random User</button>
+
+<div class="result" id="result">
+Press generate
+</div>
+</div>
+
+<script>
+
+function randomID(min, max){
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+async function generateUser(){
+
+    const id = randomID(100,777777);
+
+    document.getElementById("result").innerText = "Checking ID: " + id + "...";
+
+    try{
+
+        const res = await fetch("https://users.roblox.com/v1/users/" + id);
+        const data = await res.json();
+
+        if(data.name){
+            document.getElementById("result").innerHTML =
+            `
+            Username: <b>${data.name}</b><br>
+            UserID: ${id}<br>
+            <a href="https://www.roblox.com/users/${id}/profile" target="_blank">Open Profile</a>
+            `;
+        }
+        else{
+            document.getElementById("result").innerText =
+            "User ID " + id + " does not exist. Try again.";
+        }
+
+    }catch(err){
+        document.getElementById("result").innerText = "Error contacting Roblox API.";
+    }
+
+}
+
+</script>
+
+</body>
+</html>
