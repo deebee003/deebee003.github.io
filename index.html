@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Old Roblox Account Finder</title>
+<title>Random Old Roblox User</title>
 
 <style>
 body{
@@ -36,92 +36,65 @@ button{
     margin-top:20px;
     font-size:18px;
 }
-
-.list{
-    margin-top:20px;
-    text-align:left;
-    max-height:300px;
-    overflow:auto;
-}
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-<h2>Old Roblox User Finder</h2>
+<h2>Random Old Roblox User</h2>
 
-<button onclick="startScan()">Start Scanning</button>
+<button onclick="generateUser()">Find Old Account</button>
 
-<div class="result" id="status">
-Press start
-</div>
-
-<div class="list" id="users"></div>
+<div class="result" id="result">Press the button</div>
 
 </div>
 
 <script>
 
-let scanning = false;
-
 function randomID(min,max){
     return Math.floor(Math.random()*(max-min+1))+min;
 }
 
-async function checkUser(){
+async function generateUser(){
 
-    const id = randomID(100,777777);
+    const result = document.getElementById("result");
 
-    document.getElementById("status").innerText = "Checking ID: " + id;
+    result.innerText = "Scanning IDs...";
 
-    try{
+    while(true){
 
-        const url = "https://corsproxy.io/?https://users.roblox.com/v1/users/" + id;
+        const id = randomID(100,777777);
 
-        const res = await fetch(url);
-        const text = await res.text();
-        const data = JSON.parse(text);
+        try{
 
-        if(data && data.id){
+            const url = "https://corsproxy.io/?https://users.roblox.com/v1/users/" + id;
 
-            const createdYear = new Date(data.created).getFullYear();
+            const res = await fetch(url);
+            const text = await res.text();
+            const data = JSON.parse(text);
 
-            if(createdYear <= 2010){
+            if(data && data.id){
 
-                const container = document.getElementById("users");
+                const year = new Date(data.created).getFullYear();
 
-                container.innerHTML =
-                `
-                Username: <b>${data.name}</b><br>
-                Display Name: ${data.displayName}<br>
-                Created: ${data.created}<br>
-                UserID: ${data.id}<br>
-                <a href="https://www.roblox.com/users/${data.id}/profile" target="_blank">Profile</a>
-                <hr>
-                ` + container.innerHTML;
+                if(year <= 2010){
+
+                    result.innerHTML = `
+                    Username: <b>${data.name}</b><br>
+                    Display Name: ${data.displayName}<br>
+                    Created: ${data.created}<br>
+                    UserID: ${data.id}<br><br>
+                    <a href="https://www.roblox.com/users/${data.id}/profile" target="_blank">Open Profile</a>
+                    `;
+
+                    break;
+                }
 
             }
 
-        }
-
-    }catch(e){}
-
-}
-
-async function startScan(){
-
-    if(scanning) return;
-
-    scanning = true;
-
-    while(scanning){
-
-        await checkUser();
-
-        await new Promise(r => setTimeout(r,400));
+        }catch(e){}
 
     }
 
